@@ -1,0 +1,86 @@
+{% extends "layout.html" %}
+{% block title %}Add Transaction{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="mb-4" style="display: flex; align-items: center; gap: 15px;">
+            <a href="/transactions" class="btn-secondary" style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none;">
+                <i class="bi bi-arrow-left"></i>
+            </a>
+            <div>
+                <h2 style="margin: 0;">Add Transaction</h2>
+                <p class="text-muted" style="margin: 0; font-size: small;">Log a new income or expense.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <form action="/add_transaction" method="POST">
+                {% if message %}
+                    <p style="color: #c94a4a; font-weight: bold;">{{ message }}</p>
+                {% endif %}
+
+                <div class="mb-4">
+                    <label class="form-label" style="font-weight: 600; color: #3e322b;">Type</label>
+                    <div style="display: flex; gap: 15px;">
+                        <!-- https://stackoverflow.com/questions/4423132/how-to-hide-a-select-tag -->
+                        <input type="radio" name="type" id="radio-income" value="income" onchange="changeCategory(this)" style="display: none;">
+                        <label for="radio-income" class="type-btn" id="label-income">
+                            <i class="bi bi-arrow-up"></i> Income
+                        </label>
+
+                        <input type="radio" name="type" id="radio-expense" value="expense" onchange="changeCategory(this)" style="display: none;">
+                        <label for="radio-expense" class="type-btn" id="label-expense">
+                            <i class="bi bi-arrow-down"></i> Expense
+                        </label>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label" style="font-weight: 600; color: #3e322b;">Category</label>
+                    <select name="id_category" id="select-income" class="form-select" style="display: none;">
+                        <option value="" disabled selected>Select income category</option>
+                        {% for category in categories %}
+                            {% if category.type == "income" %}
+                                <option value="{{ category.id }}">{{ category.name }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+
+                    <select name="id_category" id="select-expense" class="form-select" style="display: none;">
+                        <option value="" disabled selected>Select expense category</option>
+                        {% for category in categories %}
+                            {% if category.type == "expense" %}
+                                <option value="{{ category.id }}">{{ category.name }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label" style="font-weight: 600; color: #3e322b;">Date</label>
+                        <input type="date" name="date" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" style="font-weight: 600; color: #3e322b;">Amount</label>
+                        <input type="number" step="0.01" name="amount" class="form-control" placeholder="e.g. 100.00">
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label" style="font-weight: 600; color: #3e322b;">Description (optional)</label>
+                    <textarea name="description" class="form-control" rows="3" placeholder="Add a note..."></textarea>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; margin-top: 30px;">
+                    <a href="/transactions" class="btn-secondary" style="width: auto; padding: 10px 30px; text-decoration: none; text-align: center;">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn-primary" style="width: auto; padding: 10px 30px;">
+                        Save transaction
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

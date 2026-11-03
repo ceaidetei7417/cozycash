@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block title %}Landing{% endblock %}
+
+{% block body %}
+    <div style="min-height: 600px; display: flex; align-items: center; justify-content: center;">
+        <div class="card" style="max-width: 400px; width: 100%; text-align: center; padding: 40px;">
+            <h1 style="font-weight: 800; color: #3e322b; margin-bottom: 10px;">cozycash.</h1>
+            <p class="text-muted" style="margin-bottom: 40px;">Your personal finance space.</p>
+            <h2 style="font-size: x-large; margin-bottom: 20px;">WELCOME!</h2>
+            <p class="text-muted" style="font-size: small; margin-bottom: 30px;">
+                Take control of your finances today. Log in to your account or create a new one to get started.
+            </p>
+
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <button id="btn-login" class="btn-primary">
+                    Login to your account
+                </button>
+
+                <button id="btn-register" class="btn-secondary">
+                    Create a new account
+                </button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends "layout.html" %}
+{% block title %}Transactions{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="mb-4" style="display: flex; align-items: center; gap: 15px;">
+            <a href="/dashboard" class="btn-secondary" style="width: 40px; height: 40px; border-radius: 50%; display: flex;
+                                                              align-items: center; justify-content: center; text-decoration: none;">
+                <i class="bi bi-arrow-left"></i>
+            </a>
+            <div>
+                <h2 style="margin: 0;">Transactions</h2>
+                <p class="text-muted" style="margin: 0; font-size: small;">All your income and expenses.</p>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-6">
+                <div class="card card-total">
+                    <div class="total-transaction" style=" background-color: #e8f0ea; color: #5a8f6a;">
+                        <i class="bi bi-arrow-up"></i>
+                    </div>
+                    <div class="text-transaction">
+                        <h5 class="text-muted" style="font-size: small; margin: 0;">Total income</h5>
+                        <h3 class="income" style="margin: 0;">+{{ total_income }} {{ currency }}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card card-total">
+                    <div class="total-transaction" style="background-color: #f8e8e8; color: #c94a4a;">
+                        <i class="bi bi-arrow-down"></i>
+                    </div>
+                    <div class="text-transaction">
+                        <h5 class="text-muted" style="font-size: small; margin: 0;">Total expenses</h5>
+                        <h3 class="expense" style="margin: 0;">-{{ total_expense }} {{ currency }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-4">
+                <a href="/add_transaction" style="text-decoration: none;">
+                    <button class="btn-primary" style="padding: 10px;">+ Add transaction</button>
+                </a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div style="display: flex; justify-content: space-between;">
+                <span class="text-muted">{{ number }} transactions</span>
+            </div>
+
+            <table>
+                <tbody>
+                    {% for transaction in transactions %}
+                        <tr>
+                            <td>
+                                <b>{{ transaction.name }}</b>
+                                <br>
+                                <small class="text-muted">
+                                    {% if transaction.description %}
+                                        {{ transaction.description }} •
+                                    {% endif %}
+                                    {{ transaction.day }}/{{ transaction.month }}/{{ transaction.year }}
+                                </small>
+                            </td>
+
+                            <td style="text-align: right; width: 100px;">
+                                {% if transaction.type == "income" %}
+                                    <span class="income">+{{ transaction.amount }} {{ currency }}</span>
+                                {% else %}
+                                    <span class="expense">-{{ transaction.amount }} {{ currency }}</span>
+                                {% endif %}
+                            </td>
+
+                            <td style="text-align: right; width: 100px;">
+                                <a href="/edit_transaction?id={{ transaction.id }}" class="text-muted"
+                                   style="text-decoration: none; margin-right: 10px;">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="3" class="text-center text-muted" style="padding: 30px;">
+                                No transactions yet
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

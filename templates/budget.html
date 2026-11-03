@@ -1,0 +1,120 @@
+{% extends "layout.html" %}
+{% block title %}Budgets{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 style="margin: 0;">Budgets</h2>
+                <p class="text-muted" style="margin: 0; font-size: small;">Set and track your monthly spending limits.</p>
+            </div>
+            <a href="/add_budget" style="text-decoration: none;">
+                <button class="btn-primary" style="width: auto; padding: 10px 20px;">+ Add budget</button>
+            </a>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card card-total">
+                    <div class="total-transaction" style="background-color: #e8f0ea; color: #5a8f6a;">
+                        <i class="bi bi-wallet2"></i>
+                    </div>
+                    <div class="text-transaction">
+                        <h5 class="text-muted" style="font-size: small; margin: 0;">Total budget</h5>
+                        <h3 style="margin: 0; color: #4a3b32; font-weight: bold;">{{ total_budget }} {{ currency }}</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card card-total">
+                    <div class="total-transaction" style="background-color: #f4ebe1; color: #4a3b32;">
+                        <i class="bi bi-graph-up-arrow"></i>
+                    </div>
+                    <div class="text-transaction">
+                        <h5 class="text-muted" style="font-size: small; margin: 0;">Spent this month</h5>
+                        <h3 style="margin: 0; color: #4a3b32; font-weight: bold;">{{ total_spent }} {{ currency }}</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card card-total">
+                    <div class="total-transaction" style="background-color: #f8e8e8; color: #c94a4a;">
+                        <i class="bi bi-pie-chart"></i>
+                    </div>
+                    <div class="text-transaction">
+                        <h5 class="text-muted" style="font-size: small; margin: 0;">Remaining</h5>
+                        <h3 class="{{ 'income' if total >= 0 else 'expense' }}" style="margin: 0; font-weight: bold;">
+                            {{ total }} {{ currency }}
+                        </h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Type</th>
+                        <th>Budget</th>
+                        <th>Spent</th>
+                        <th>Remaining</th>
+                        <th style="width: 20%;">Progress</th>
+                        <th style="text-align: right;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for budget in budgets %}
+                        <tr>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <b>{{ budget.name }}</b>
+                                </div>
+                            </td>
+
+                            <td>
+                                <span class="badge" style="background-color: #f8e8e8; color: #c94a4a; padding: 5px 10px; border-radius: 5px;">Expense</span>
+                            </td>
+
+                            <td>{{ budget.amount }} {{ currency }}</td>
+                            <td>{{ budget.total_spent or 0 }} {{ currency }}</td>
+
+                            <td class="{{ 'income' if (budget.amount - (budget.total_spent or 0)) >= 0 else 'expense' }}">
+                                {{ budget.amount - (budget.total_spent or 0) }} {{ currency }}
+                            </td>
+
+                            <td>
+                                {% if budget.amount > 0 %}
+                                    {% set procent = (budget.total_spent / budget.amount * 100) if budget.total_spent else 0 %}
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <div class="progress" style="flex-grow: 1; margin-top: 0;">
+                                            <div class="progress-bar" role="progressbar" style="width: {{ procent }}%; background-color: {{ '#c94a4a' if procent > 100 else '#4a3b32' }};"></div>
+                                        </div>
+                                        <span style="font-size: small; color: #8c7a6b; min-width: 35px;">{{ procent }}%</span>
+                                    </div>
+                                {% else %}
+                                    <span class="text-muted" style="font-size: small;">N/A</span>
+                                {% endif %}
+                            </td>
+
+                            <td style="text-align: right;">
+                                <a href="/edit_budget?id={{ budget.id }}" class="text-muted" style="text-decoration: none; margin-right: 10px;">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="7" class="text-center text-muted" style="padding: 30px;">
+                                No budgets set for this month.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

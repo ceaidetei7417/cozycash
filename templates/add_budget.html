@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+{% block title %}Add Budget{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="mb-4" style="display: flex; align-items: center; gap: 15px;">
+            <a href="/budget" class="btn-secondary" style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none;">
+                <i class="bi bi-arrow-left"></i>
+            </a>
+            <div>
+                <h2 style="margin: 0;">Add Budget</h2>
+                <p class="text-muted" style="margin: 0; font-size: small;">Set a monthly spending limit for a category.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <form action="/add_budget" method="POST">
+                {% if message %}
+                    <p style="color: #c94a4a; font-weight: bold;">{{ message }}</p>
+                {% endif %}
+
+                <div class="mb-4">
+                    <label class="form-label" style="font-weight: 600; color: #3e322b;">Category</label>
+                    <select name="id_category" class="form-select">
+                        <option value="" disabled selected>Select category</option>
+                        {% for category in categories %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label" style="font-weight: 600; color: #3e322b;">Monthly limit ({{ currency }})</label>
+                    <input type="number" step="0.01" name="amount" class="form-control" placeholder="e.g. 400.00">
+                </div>
+
+                <div style="background-color: #e8f0ea; color: #5a8f6a; padding: 15px; border-radius: 10px; font-size: small; margin-bottom: 30px;">
+                    <i class="bi bi-info-circle-fill"></i> You can set one budget per category for each month.
+                </div>
+
+                <div style="display: flex; justify-content: space-between; margin-top: 30px;">
+                    <a href="/budget" class="btn-secondary" style="width: auto; padding: 10px 30px; text-decoration: none; text-align: center;">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn-primary" style="width: auto; padding: 10px 30px;">
+                        Save budget
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

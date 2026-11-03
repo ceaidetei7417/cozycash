@@ -1,0 +1,102 @@
+{% extends "layout.html" %}
+{% block title %}Edit Transaction{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="mb-4" style="display: flex; align-items: center; gap: 15px;">
+            <a href="/transactions" class="btn-secondary" style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none;">
+                <i class="bi bi-arrow-left"></i>
+            </a>
+            <div>
+                <h2 style="margin: 0;">Edit Transaction</h2>
+                <p class="text-muted" style="margin: 0; font-size: small;">Update your transaction.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <form action="/edit_transaction?id={{ transaction.id }}" method="POST">
+                {% if message %}
+                    <p style="color: #c94a4a; font-weight: bold;">{{ message }}</p>
+                {% endif %}
+
+                <div class="mb-4">
+                    <label class="form-label" style="font-weight: 600; color: #3e322b;">Type</label>
+                    <div style="display: flex; gap: 15px;">
+                        <input type="radio" name="type" id="radio-income" value="income" onchange="changeCategory(this)"
+                               {% if transaction.type == 'income' %}checked{% endif %} style="display: none;">
+                        <label for="radio-income" class="type-btn" id="label-income">
+                            <i class="bi bi-arrow-up"></i> Income
+                        </label>
+
+                        <input type="radio" name="type" id="radio-expense" value="expense" onchange="changeCategory(this)"
+                               {% if transaction.type == 'expense' %}checked{% endif %} style="display: none;">
+                        <label for="radio-expense" class="type-btn" id="label-expense">
+                            <i class="bi bi-arrow-down"></i> Expense
+                        </label>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label" style="font-weight: 600; color: #3e322b;">Category</label>
+
+                    <select name="id_category" id="select-income" class="form-select"
+                            style="display: {% if transaction.type == 'income' %}block{% else %}none{% endif %};"
+                            {% if transaction.type != 'income' %}disabled{% endif %}>
+                        <option value="" disabled>Choose income category</option>
+                        {% for category in categories %}
+                            {% if category.type == "income" %}
+                                <option value="{{ category.id }}" {% if category.id == transaction.id_category %}selected{% endif %}>
+                                    {{ category.name }}
+                                </option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+
+                    <select name="id_category" id="select-expense" class="form-select" style="display: {% if transaction.type == 'expense' %}block{% else %}none{% endif %};"
+                            {% if transaction.type != 'expense' %}disabled{% endif %}>
+                        <option value="" disabled>Choose expense category</option>
+                        {% for category in categories %}
+                            {% if category.type == "expense" %}
+                                <option value="{{ category.id }}" {% if category.id == transaction.id_category %}selected{% endif %}>
+                                    {{ category.name }}
+                                </option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label" style="font-weight: 600; color: #3e322b;">Date</label>
+                        <input type="date" name="date" class="form-control" value="{{ transaction.year }}-{{ transaction.month }}-{{ transaction.day }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" style="font-weight: 600; color: #3e322b;">Amount</label>
+                        <input type="number" step="0.01" name="amount" class="form-control" value="{{ transaction.amount }}">
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label" style="font-weight: 600; color: #3e322b;">Description (optional)</label>
+                    <textarea name="description" class="form-control" rows="3">{{ transaction.description }}</textarea>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px;">
+                    <button type="submit" name="action" value="delete" onclick="return confirm('Are you sure you want to delete this transaction?');"
+                            style="background: none; border: none; color: #c94a4a; font-weight: 600; cursor: pointer; padding: 10px 0;">
+                        <i class="bi bi-trash"></i>Delete
+                    </button>
+
+                    <div style="display: flex; gap: 15px;">
+                        <a href="/transactions" class="btn-secondary" style="width: auto; padding: 10px 30px; text-decoration: none; text-align: center;">
+                            Cancel
+                        </a>
+                        <button type="submit" class="btn-primary" style="width: auto; padding: 10px 30px;">
+                            Save changes
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

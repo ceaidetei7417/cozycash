@@ -1,0 +1,119 @@
+{% extends "layout.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="mb-4">
+            <h2>Good afternoon, {{ username }}!</h2>
+            <p class="text-muted">Here's your financial overview.</p>
+        </div>
+
+        <div class="card card-balance">
+            <h5>TOTAL BALANCE</h5>
+            <h2>{{ balance }} {{ currency }}</h2>
+            <p style="color: #f8f5f2; margin-top: 10px; font-size: small;">&#8605 Your current balance</p>
+        </div>
+
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <h5 class="text-muted" style="font-size: small;">
+                        <i class="bi bi-arrow-up-right" style="color: #5a8f6a; font-weight: bold;"></i>
+                        <br>
+                        Income this month
+                    </h5>
+                    <h3 class="income">{{ month_income }} {{ currency }}</h3>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card">
+                    <h5 class="text-muted" style="font-size: small;">
+                        <i class="bi bi-arrow-down-right" style="color: #c94a4a; font-weight: bold;"></i>
+                        <br>
+                        Expenses this month
+                    </h5>
+                    <h3 class="expense">{{ month_expense }} {{ currency }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div style="display: flex; justify-content: space-between;">
+                <h5>Monthly budget</h5>
+                <span class="text-muted">{{ month_name }}</span>
+            </div>
+
+            {% if month_budget > 0 %}
+                {% set procent = (month_expense / month_budget * 100) %} <!-- Setting a variable wiht 'set' statement-->
+                <p>
+                    {{ month_expense }} {{ currency }} spent
+                    <span style="float: right;">
+                        {{ procent }}% of {{ month_budget }} {{ currency }}
+                    </span>
+                </p>
+
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: {{ procent }}%"></div>
+                </div>
+            {% else %}
+                <p class="text-muted">You don't have a budget yet.</p>
+            {% endif %}
+        </div>
+
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h5>Recent transactions</h5>
+                <a href="/transactions" class="text-muted" style="font-size: small; text-decoration: none;">View all &#x2192</a>
+            </div>
+
+            <table>
+                <tbody>
+                    {% for transaction in recent_transactions %}
+                        <tr>
+                            <td>
+                                <b>{{ transaction.name }}</b>
+                                <br>
+                                <small class="text-muted">{{ transaction.day }}/{{ transaction.month }}/{{ transaction.year }}</small>
+                            </td>
+                            {% if transaction.type == "income" %}
+                                <td style="text-align: right;">
+                                    <span class="income">+{{ transaction.amount }} {{ currency }}</span>
+                                </td>
+                            {% else %}
+                                <td style="text-align: right;">
+                                    <span class="expense">-{{ transaction.amount }} {{ currency }}</span>
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="2" class="text-center text-muted">
+                                No transactions yet.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-6">
+                <a href="/add_transaction" style="text-decoration: none;">
+                    <button class="btn-primary">
+                        +<br>Add Transaction
+                    </button>
+                </a>
+            </div>
+
+            <div class="col-6">
+                <a href="/budget" style="text-decoration: none;">
+                    <button class="btn-secondary">
+                        <i class="bi bi-wallet2"></i>
+                        <br>
+                        Manage budgets
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,16 @@
+# Database
+*.db
+
+# Flask sessions
+flask_session/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Environment variables
+.env
+
+# Virtual environments
+venv/
+.venv/

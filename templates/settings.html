@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+{% block title %}Settings{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="mb-4" style="display: flex; align-items: center; gap: 15px;">
+            <a href="/dashboard" class="btn-secondary" style="width: 40px; height: 40px; border-radius: 50%;
+                                                              display: flex; align-items: center; justify-content: center; text-decoration: none;">
+                <i class="bi bi-arrow-left"></i>
+            </a>
+
+            <div>
+                <h2 style="margin: 0;">Settings</h2>
+                <p class="text-muted" style="margin: 0; font-size: small;">Manage your account preferences.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <form action="/settings" method="POST">
+
+                <div class="mb-4">
+                    <label class="form-label" style="font-weight: 600; color: #3e322b;">Preferred Currency</label>
+                    <p class="text-muted" style="font-size: small; margin-bottom: 10px;">Choose the currency in which you want to view your money.</p>
+                    <select name="currency" class="form-select">
+                        <option value="RON" {% if currency == "RON" %}selected{% endif %}>
+                            Lei (RON)
+                        </option>
+                        <option value="EUR" {% if currency == "EUR" %}selected{% endif %}>
+                            Euro (EUR)
+                        </option>
+                        <option value="USD" {% if currency == "USD" %}selected{% endif %}>
+                            US Dollar (USD)
+                        </option>
+                        <option value="GBP" {% if currency == "GBP" %}selected{% endif %}>
+                            British Pound (GBP)
+                        </option>
+                        <option value="CHF" {% if currency == "CHF" %}selected{% endif %}>
+                            Swiss Franc (CHF)
+                        </option>
+                        <option value="CAD" {% if currency == "CAD" %}selected{% endif %}>
+                            Canadian Dollar (CAD)
+                        </option>
+                        <option value="AUD" {% if currency == "AUD" %}selected{% endif %}>
+                            Australian Dollar (AUD)
+                        </option>
+                        <option value="JPY" {% if currency == "JPY" %}selected{% endif %}>
+                            Japanese Yen (JPY)
+                        </option>
+                        <option value="PLN" {% if currency == "PLN" %}selected{% endif %}>
+                            Polish Złoty (PLN)
+                        </option>
+                        <option value="HUF" {% if currency == "HUF" %}selected{% endif %}>
+                            Hungarian Forint (HUF)
+                        </option>
+                    </select>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; margin-top: 30px;">
+                    <button type="submit" class="btn-primary" style="width: auto; padding: 10px 30px;">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
